@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+- '8'
+deploy:
+  provider: npm
+  email: serveradmin@octoblu.com
+  api_key:
+    secure: Ezl9LT3+75DebOE1DVPbcO8LM5PstYTMbBuLYF0x/NKNIAb/Iy4PekUGQtan3zg5WdavlI9Vf4iK7d38vxXniJVKCW282BRRD3PFWXhrxFwO81v2sDoysPHW61uNO2sPMol0l+TDEE6T46QqpKNWUU3GX32AGhP+ZAaQMKOAQStSP+x6B2irFtYitMnhd1Pwv7QA5ikloEcZ/G8dJb7cjjtfniFtjVs7W/YDUuT1fkWPorj6OIBcAgozjEqxIN5wVYCGImthMW9Yjp3ROn/EPNDTI0o/kDimIaPwQ+BReagtH0Dr7Ce/BE8ulJSD7tDBfYqA78F8uNLGVaRpBg92R/6gl3bf364uW+81jp9cwHCOYVR+qXOZRSxhxKZzoybRHs72Nx4CwC4uhBF46CpIK9rRNpg1LumuWZOH1VD7Sn2vq4p7aKhYEKZSrO6i5gHZs0Ftz8vAjC63JS9Kw21NUES1Lb1vCBFoVlm+k4shGwhg0AmZ+Qb31+D5nkebMwauElDsFO1nhQRh2zLmLy/okQ6rlFPy7HNroVBXmcqxFV6jYJu6tbXa5c40v3Zi57bI33WOsu893QuoYdVwWW+DjikTG8VrkZiWeVIfRPB76AFVmufLf92aD7ftrCjdVN5cpVEcwVN9A8UiFmYbDhOE0VTULGX7Y1F/yIgyj2RDL0w=
+  on:
+    tags: true
+    repo: octoblu/octodash
