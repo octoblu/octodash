@@ -91,7 +91,7 @@ class OctoDash {
     if (_.includes(["version", "help"], key)) {
       return
     }
-    return { key, value }
+    return { key: _.camelCase(key), value }
   }
 
   parseOptions() {
