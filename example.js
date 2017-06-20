@@ -1,11 +1,5 @@
-# octodash
-An opinionated version of dashdash
-
-# Example Usage
-
-```js
-const OctoDash = require('octodash')
-const packageJSON = require('./package.json')
+const OctoDash = require("./index.js")
+const packageJSON = require("./package.json")
 
 const CLI_OPTIONS = [
   {
@@ -51,4 +45,3 @@ const octoDash = new OctoDash({
 })
 const options = octoDash.parseOptions()
 console.log(options)
-```
