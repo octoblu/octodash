@@ -106,7 +106,7 @@ class OctoDash {
   }
 
   _parseOption(option, parsed) {
-    const names = option.names || [option.name]
+    const names = this._getOptionNames(option)
     const args = _.map(names, arg => {
       if (_.startsWith("-")) return arg
       if (_.size(arg) === 1) return `-${arg}`
@@ -134,21 +134,24 @@ class OctoDash {
     return { key: _.camelCase(key), value }
   }
 
-  _mergeCliOptions(cliOptions = []) {
-    const options = []
-    _.each(DEFAULT_CLI_OPTIONS, defaultOption => {
-      const defaultNames = defaultOption.names || [defaultOption.name]
-      const option = _.find(cliOptions, option => {
-        const names = option.names || [option.name]
-        return _.first(names) === _.first(defaultNames)
+  _getOptionName(option) {
+    return _.first(this._getOptionNames(option))
+  }
+
+  _getOptionNames(option) {
+    return option.names || [option.name]
+  }
+
+  _mergeCliOptions(options = []) {
+    const missing = _.filter(options, option => {
+      const name = this._getOptionName(option)
+      const defaultOption = _.each(DEFAULT_CLI_OPTIONS, defaultOption => {
+        const defaultName = this._getOptionName(defaultOption)
+        return name === defaultName
       })
-      if (option == null) {
-        return options.push(defaultOption)
-      } else {
-        return options.push(option)
-      }
+      return defaultOption
     })
-    return options
+    return _.union(missing, options)
   }
 }
 
