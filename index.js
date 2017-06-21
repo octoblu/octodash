@@ -145,11 +145,10 @@ class OctoDash {
   _mergeCliOptions(options = []) {
     const missing = _.filter(options, option => {
       const name = this._getOptionName(option)
-      const defaultOption = _.each(DEFAULT_CLI_OPTIONS, defaultOption => {
+      return _.find(DEFAULT_CLI_OPTIONS, defaultOption => {
         const defaultName = this._getOptionName(defaultOption)
         return name === defaultName
       })
-      return defaultOption
     })
     return _.union(missing, options)
   }
