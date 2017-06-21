@@ -1,6 +1,6 @@
 {
   "name": "octodash",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "An opinionated version of dashdash",
   "main": "index.js",
   "repository": "git@github.com:octoblu/octodash.git",

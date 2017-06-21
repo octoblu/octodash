@@ -4,20 +4,10 @@ An opinionated version of dashdash
 # Example Usage
 
 ```js
-const OctoDash = require('octodash')
-const packageJSON = require('./package.json')
+const OctoDash = require("./index.js")
+const packageJSON = require("./package.json")
 
 const CLI_OPTIONS = [
-  {
-    name: "version",
-    type: "bool",
-    help: "Print connector version and exit.",
-  },
-  {
-    names: ["help", "h"],
-    type: "bool",
-    help: "Print this help and exit.",
-  },
   {
     names: ["first-thing", "f"],
     type: "string",
@@ -50,5 +40,7 @@ const octoDash = new OctoDash({
   version: packageJSON.version,
 })
 const options = octoDash.parseOptions()
-console.log(options)
+console.log('Parsed Options', options)
+octoDash.die() // exits with status 0
+octoDash.die(new Error('oh no')) // prints error and exists with status code 1
 ```
