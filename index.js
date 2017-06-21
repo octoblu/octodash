@@ -5,6 +5,7 @@ const dotenvExpand = require("dotenv-expand")
 const fs = require("fs")
 const path = require("path")
 const chalk = require("chalk")
+const debug = require("debug")("octodash")
 
 const DEFAULT_CLI_OPTIONS = [
   {
@@ -34,6 +35,7 @@ class OctoDash {
     if (!argv) return this.die(new Error("OctoDash requires options.argv"))
     if (!name) return this.die(new Error("OctoDash requires options.name"))
     if (!version) return this.die(new Error("OctoDash requires options.version"))
+    debug("octodash constructor", { cliOptions, name, version })
     this.name = name
     this.version = version
     this.argv = argv
@@ -42,8 +44,6 @@ class OctoDash {
   }
 
   parseOptions() {
-    const { env_file } = this._parseArgv()
-    if (env_file) this.envFile = this.env_file
     this._parseDotEnv()
     const parsed = this._parseArgv()
     const errors = []
@@ -63,14 +63,17 @@ class OctoDash {
       })
       process.exit(1)
     }
+    debug("parsed options", options)
     return options
   }
 
   die(error) {
     if (!error) {
+      debug("die")
       process.exit(0)
       return
     }
+    debug("die with error", error.stack)
     console.error(`${this.name}:`, error.toString())
     process.exit(1)
   }
@@ -95,13 +98,18 @@ class OctoDash {
   }
 
   _parseDotEnv() {
+    let envFile = this._parseArgv().env_file
+    if (!envFile) envFile = path.join(process.cwd(), ".env")
+    debug("parse dotenv", { envFile })
     try {
-      fs.accessSync(this.envFile, fs.constants.R_OK)
+      fs.accessSync(envFile, fs.constants.R_OK)
     } catch (error) {
+      debug("no access for envfile", error.stack)
       return
     }
-    const parsedEnv = dotenv.config({ path: this.envFile })
+    const parsedEnv = dotenv.config({ path: envFile })
     dotenvExpand(parsedEnv)
+    debug("parsedEnv", parsedEnv)
     return
   }
 
