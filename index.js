@@ -24,7 +24,7 @@ const DEFAULT_CLI_OPTIONS = [
   {
     names: ["env-file"],
     type: "string",
-    default: path.join(process.cwd(), ".env"),
+    default: path.join(path.dirname(process.argv[1]), ".env"),
     env: "OCTODASH_ENV_FILE",
     help: "dotenv file",
     helpArg: "FILE",
@@ -33,7 +33,7 @@ const DEFAULT_CLI_OPTIONS = [
   {
     names: ["env-ini-file"],
     type: "string",
-    default: path.join(process.cwd(), "env.ini"),
+    default: path.join(path.dirname(process.argv[1]), "env.ini"),
     env: "OCTODASH_ENV_INI_FILE",
     help: "env ini file",
     helpArg: "FILE",
