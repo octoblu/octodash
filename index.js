@@ -8,6 +8,7 @@ const chalk = require("chalk")
 const debug = require("debug")("octodash")
 const forEach = require("lodash.foreach")
 const ini = require("ini")
+const untildify = require("untildify")
 
 const DEFAULT_CLI_OPTIONS = [
   {
@@ -156,6 +157,9 @@ class OctoDash {
     let value = parsed[key]
     if (option.required && !value) {
       return new Error(`${this.name} requires ${possibleOptions.join(", ")}`)
+    }
+    if (option.completionType === 'file') {
+      value = path.resolve(untildify(value))
     }
     if (option.base64) {
       try {
