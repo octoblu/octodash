@@ -10,6 +10,10 @@ const forEach = require("lodash.foreach")
 const ini = require("ini")
 const untildify = require("untildify")
 
+let execPath = path.dirname(process.argv[1])
+
+if (process.pkg) execPath = path.dirname(process.execPath)
+
 const DEFAULT_CLI_OPTIONS = [
   {
     names: ["version", "v"],
@@ -24,7 +28,7 @@ const DEFAULT_CLI_OPTIONS = [
   {
     names: ["env-file"],
     type: "string",
-    default: path.join(path.dirname(process.argv[1]), ".env"),
+    default: path.join(execPath, ".env"),
     env: "OCTODASH_ENV_FILE",
     help: "dotenv file",
     helpArg: "FILE",
@@ -33,7 +37,7 @@ const DEFAULT_CLI_OPTIONS = [
   {
     names: ["env-ini-file"],
     type: "string",
-    default: path.join(path.dirname(process.argv[1]), "env.ini"),
+    default: path.join(execPath, "env.ini"),
     env: "OCTODASH_ENV_INI_FILE",
     help: "env ini file",
     helpArg: "FILE",
@@ -112,7 +116,6 @@ class OctoDash {
 
   _parseDotEnv() {
     let envFile = this._parseArgv().env_file
-    if (!envFile) envFile = path.join(process.cwd(), ".env")
     debug("parse dotenv", { envFile })
     try {
       fs.accessSync(envFile, fs.constants.R_OK)
@@ -128,7 +131,6 @@ class OctoDash {
 
   _parseEnvIni() {
     let envIniFile = this._parseArgv().env_ini_file
-    if (!envIniFile) envIniFile = path.join(process.cwd(), "env.ini")
     debug("parse ini env", { envIniFile })
     try {
       fs.accessSync(envIniFile, fs.constants.R_OK)
