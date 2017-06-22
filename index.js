@@ -6,6 +6,8 @@ const fs = require("fs")
 const path = require("path")
 const chalk = require("chalk")
 const debug = require("debug")("octodash")
+const forEach = require("lodash.foreach")
+const ini = require("ini")
 
 const DEFAULT_CLI_OPTIONS = [
   {
@@ -27,6 +29,15 @@ const DEFAULT_CLI_OPTIONS = [
     helpArg: "FILE",
     completionType: "file",
   },
+  {
+    names: ["env-ini-file"],
+    type: "string",
+    default: path.join(process.cwd(), "env.ini"),
+    env: "OCTODASH_ENV_INI_FILE",
+    help: "env ini file",
+    helpArg: "FILE",
+    completionType: "file",
+  },
 ]
 
 class OctoDash {
@@ -45,6 +56,7 @@ class OctoDash {
 
   parseOptions() {
     this._parseDotEnv()
+    this._parseEnvIni()
     const parsed = this._parseArgv()
     const errors = []
     const options = {}
@@ -110,6 +122,25 @@ class OctoDash {
     const parsedEnv = dotenv.config({ path: envFile })
     dotenvExpand(parsedEnv)
     debug("parsedEnv", parsedEnv)
+    return
+  }
+
+  _parseEnvIni() {
+    let envIniFile = this._parseArgv().env_ini_file
+    if (!envIniFile) envIniFile = path.join(process.cwd(), "env.ini")
+    debug("parse ini env", { envIniFile })
+    try {
+      fs.accessSync(envIniFile, fs.constants.R_OK)
+    } catch (error) {
+      debug("no access for envfile", error.stack)
+      return
+    }
+
+    const parsedIni = ini.parse(fs.readFileSync(envIniFile, 'utf-8'))
+    debug("parsedIni", parsedIni)
+    forEach(parsedIni.environment, (value, key) => {
+      process.env[key] = value
+    })
     return
   }
 
