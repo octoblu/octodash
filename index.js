@@ -91,6 +91,8 @@ class OctoDash {
       return
     }
     debug("die with error", error.stack)
+    if (error.stdout) debug("stdout", error.stdout)
+    if (error.stderr) debug("stderr", error.stderr)
     console.error(`${this.name}:`, error.toString())
     process.exit(1)
   }
