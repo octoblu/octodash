@@ -139,7 +139,7 @@ class OctoDash {
       return
     }
 
-    const parsedIni = ini.parse(fs.readFileSync(envIniFile, 'utf-8'))
+    const parsedIni = ini.parse(fs.readFileSync(envIniFile, "utf-8"))
     debug("parsedIni", parsedIni)
     forEach(parsedIni.environment, (value, key) => {
       process.env[key] = value
@@ -160,7 +160,7 @@ class OctoDash {
     if (option.required && !value) {
       return new Error(`${this.name} requires ${possibleOptions.join(", ")}`)
     }
-    if (option.completionType === 'file') {
+    if (option.completionType === "file" && value) {
       value = path.resolve(untildify(value))
     }
     if (option.base64) {
