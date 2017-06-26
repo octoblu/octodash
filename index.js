@@ -161,7 +161,14 @@ class OctoDash {
       return new Error(`${this.name} requires ${possibleOptions.join(", ")}`)
     }
     if (option.completionType === "file" && value) {
-      value = path.resolve(untildify(value))
+      if (value[0] === "~") {
+        try {
+          value = untildify(value)
+        } catch (error) {
+          console.error(error.stack)
+        }
+      }
+      value = path.resolve(value)
     }
     if (option.base64) {
       try {
