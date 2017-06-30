@@ -4,7 +4,7 @@ An opinionated version of dashdash
 # Example Usage
 
 ```js
-const OctoDash = require("./index.js")
+const OctoDash = require("octodash")
 const packageJSON = require("./package.json")
 
 const CLI_OPTIONS = [

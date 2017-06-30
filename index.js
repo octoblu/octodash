@@ -142,10 +142,15 @@ class OctoDash {
     }
 
     const parsedIni = ini.parse(fs.readFileSync(envIniFile, "utf-8"))
+    const parsedEnv = { parsed: {} }
     debug("parsedIni", parsedIni)
     forEach(parsedIni.environment, (value, key) => {
+      if (process.env[key]) return
+      parsedEnv.parsed[key] = value
       process.env[key] = value
     })
+    dotenvExpand(parsedEnv)
+    debug("parsedIni expanded", parsedEnv)
     return
   }
 
