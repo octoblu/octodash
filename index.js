@@ -118,39 +118,35 @@ class OctoDash {
 
   _parseDotEnv() {
     let envFile = this._parseArgv().env_file
-    debug("parse dotenv", { envFile })
     try {
       fs.accessSync(envFile, fs.constants.R_OK)
     } catch (error) {
-      debug("no access for envfile", error.stack)
+      debug(`no access to env file ${envFile}`)
       return
     }
+    debug(`using env file ${envFile}`)
     const parsedEnv = dotenv.config({ path: envFile })
     dotenvExpand(parsedEnv)
-    debug("parsedEnv", parsedEnv)
     return
   }
 
   _parseEnvIni() {
     let envIniFile = this._parseArgv().env_ini_file
-    debug("parse ini env", { envIniFile })
     try {
       fs.accessSync(envIniFile, fs.constants.R_OK)
     } catch (error) {
-      debug("no access for envfile", error.stack)
+      debug(`no access to ini file ${envIniFile}`)
       return
     }
-
+    debug(`using ini file ${envIniFile}`)
     const parsedIni = ini.parse(fs.readFileSync(envIniFile, "utf-8"))
     const parsedEnv = { parsed: {} }
-    debug("parsedIni", parsedIni)
     forEach(parsedIni.environment, (value, key) => {
       if (process.env[key]) return
       parsedEnv.parsed[key] = value
       process.env[key] = value
     })
     dotenvExpand(parsedEnv)
-    debug("parsedIni expanded", parsedEnv)
     return
   }
 
