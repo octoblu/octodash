@@ -47,6 +47,7 @@ const DEFAULT_CLI_OPTIONS = [
 
 class OctoDash {
   constructor(options = {}) {
+    _.bindAll(this, Object.getOwnPropertyNames(OctoDash.prototype))
     let { argv, cliOptions, name, version } = options
     if (!argv) return this.die(new Error("OctoDash requires options.argv"))
     if (!name) return this.die(new Error("OctoDash requires options.name"))
