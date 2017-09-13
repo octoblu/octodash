@@ -81,6 +81,7 @@ class OctoDash {
       })
       process.exit(1)
     }
+    options._args = parsed._args
     debug("parsed options", options)
     return options
   }
