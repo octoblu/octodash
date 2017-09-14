@@ -6,7 +6,7 @@ const getPackageJSON = require("./lib/helpers/get-package-json")
 const debug = require("debug")("octodash")
 
 require("./lib/option-types/base64")
-require("./lib/option-types/bool")
+require("./lib/option-types/boolarg")
 require("./lib/option-types/file")
 require("./lib/option-types/string")
 
@@ -55,9 +55,7 @@ class OctoDash {
       }
     })
     if (_.size(errors)) {
-      console.log(
-        `usage: ${this.name} [OPTIONS]\noptions:\n${this.parser.help({ includeEnv: true, includeDefault: true })}`,
-      )
+      console.log(`usage: ${this.name} [OPTIONS]\noptions:\n${this.parser.help({ includeEnv: true, includeDefault: true })}`)
       errors.forEach(error => {
         console.error(chalk.red(error.message))
       })
@@ -89,9 +87,7 @@ class OctoDash {
       return {}
     }
     if (opts.help) {
-      console.log(
-        `usage: ${this.name} [OPTIONS]\noptions:\n${this.parser.help({ includeEnv: true, includeDefault: true })}`,
-      )
+      console.log(`usage: ${this.name} [OPTIONS]\noptions:\n${this.parser.help({ includeEnv: true, includeDefault: true })}`)
       process.exit(0)
     }
 
@@ -117,7 +113,7 @@ class OctoDash {
     const possibleOptions = _.compact(_.union(args, _.castArray(option.env)))
     const key = _.first(names).replace(/-/g, "_")
     let value = parsed[key]
-    if (option.required && !value) {
+    if (option.required && value == null) {
       return new Error(`${this.name} requires ${possibleOptions.join(", ")}`)
     }
     if (_.includes(["version", "help"], key)) return
