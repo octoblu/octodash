@@ -3,13 +3,10 @@ const dashdash = require("dashdash")
 const path = require("path")
 const chalk = require("chalk")
 const getPackageJSON = require("./lib/helpers/get-package-json")
-const { parseEnvFile, parseEnvIniFile } = require("./lib/helpers/parse-env-file")
 const debug = require("debug")("octodash")
 
 require("./lib/option-types/base64")
 require("./lib/option-types/bool")
-require("./lib/option-types/env-file")
-require("./lib/option-types/env-ini-file")
 require("./lib/option-types/file")
 require("./lib/option-types/string")
 
@@ -29,28 +26,15 @@ const DEFAULT_CLI_OPTIONS = [
     type: "bool",
     help: "Print this help and exit.",
   },
-  {
-    names: ["env-file"],
-    type: "env-file",
-    default: path.join(execPath, ".env"),
-    env: "OCTODASH_ENV_FILE",
-    completionType: "file",
-  },
-  {
-    names: ["env-ini-file"],
-    type: "env-ini-file",
-    default: path.join(execPath, "env.ini"),
-    env: "OCTODASH_ENV_INI_FILE",
-    completionType: "file",
-  },
 ]
 
 class OctoDash {
   constructor(options = {}) {
     _.bindAll(this, Object.getOwnPropertyNames(OctoDash.prototype))
-    const { argv, cliOptions, name, version } = options
+    const { argv, env, cliOptions, name, version } = options
     if (!argv) return this.die(new Error("OctoDash requires options.argv"))
     this.argv = argv
+    this.env = env || process.env
     this.name = name || _.get(packageJSON, "name", fileName)
     this.version = version || _.get(packageJSON, "version")
     this.cliOptions = this._mergeCliOptions(cliOptions)
@@ -58,7 +42,6 @@ class OctoDash {
   }
 
   parseOptions() {
-    this._setDefaultEnv()
     const parsed = this._parseArgv()
     const errors = []
     const options = {}
@@ -99,8 +82,9 @@ class OctoDash {
   }
 
   _parseArgv() {
+    const { argv, env } = this
     try {
-      var opts = this.parser.parse(this.argv)
+      var opts = this.parser.parse({ argv, env })
     } catch (e) {
       return {}
     }
@@ -157,21 +141,6 @@ class OctoDash {
       })
     })
     return _.union(missing, options)
-  }
-
-  _setDefaultEnv() {
-    const options = this._parseArgv()
-    const
-    _.each(this.cliOptions, option => {
-      if (option.type === "env-file") {
-        if (!option.default) return
-        parseEnvFile(option.default)
-      }
-      if (option.type === "env-ini-file") {
-        if (!option.default) return
-        parseEnvIniFile(option.default)
-      }
-    })
   }
 }
 
