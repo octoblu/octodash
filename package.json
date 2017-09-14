@@ -10,6 +10,7 @@
     "test": "echo 'no tests :('"
   },
   "dependencies": {
+    "assert-plus": "^1.0.0",
     "chalk": "^1.1.3",
     "dashdash": "^1.14.1",
     "debug": "^2.6.8",
@@ -17,7 +18,6 @@
     "dotenv-expand": "^4.0.1",
     "ini": "^1.3.4",
     "lodash": "^4.17.4",
-    "lodash.foreach": "^4.5.0",
     "untildify": "^3.0.2"
   }
 }
